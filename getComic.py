@@ -162,4 +162,4 @@ if __name__ == "__main__":
         page_n = int(sys.argv[2])
         download(name,page_n)
     else :
-        print("python getComic.py 2014/02/39332 23")
+        print("python3 getComic.py 2014/02/39332 23")
