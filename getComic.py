@@ -11,7 +11,7 @@ def download(name, page_n):
     images = []
     success = "success"
 
-    url = "http://www.177pic.pw/html/"+name
+    url = "http://www.177pic.pw/html/"+name+".html"
     request = requests.get(url)
     html = etree.HTML(request.text)
     title = html.xpath("//main[@id='main']/article/header/h1/text()")[0]
@@ -158,7 +158,7 @@ if __name__ == "__main__":
             page_n = int(comic.split(" ")[1])
             download(name, page_n)
     elif len(sys.argv)==3:
-        name = sys.argv[1]+".html"
+        name = sys.argv[1]
         page_n = int(sys.argv[2])
         download(name,page_n)
     else :

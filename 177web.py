@@ -9,7 +9,7 @@ def comic(name):
 
 @app.route('/download/<number>')
 def download(number):
-    name = "/".join(number.split("-")[:-1])+".html"
+    name = "/".join(number.split("-")[:-1])
     page_n = int(number.split("-")[-1])
     getComic.download(name,page_n)
     return getComic.success
