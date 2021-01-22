@@ -19,7 +19,7 @@ def download(number):
 @app.route('/list')
 def list():
     files = os.listdir('./templates')
-    print(files)
+    # print(files)
       
     urls = []
     for file in files:
