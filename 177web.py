@@ -11,9 +11,8 @@ def comic(name):
 
 @app.route('/download/<number>')
 def download(number):
-    name = "/".join(number.split("-")[:-1])
-    page_n = int(number.split("-")[-1])
-    getComic.download(name,page_n)
+    name = "/".join(number.split("-"))
+    getComic.download(name)
     return getComic.success
 
 @app.route('/list')

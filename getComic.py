@@ -6,7 +6,7 @@ images = []
 success = "success"
 
 
-def download(name, page_n):
+def download(name):
     global images,success
     images = []
     success = "success"
@@ -15,6 +15,7 @@ def download(name, page_n):
     request = requests.get(url)
     html = etree.HTML(request.text)
     title = html.xpath("//main[@id='main']/article/header/h1/text()")[0]
+    page_n = int(html.xpath("//div[@class='page-links']/a[last()-1]/span/text()")[0])
     print(title+" downloading...")
 
     for i in range(page_n):
@@ -154,12 +155,9 @@ if __name__ == "__main__":
                 comics.append(line.replace("\n", ""))
 
         for comic in comics:
-            name = comic.split(" ")[0]
-            page_n = int(comic.split(" ")[1])
-            download(name, page_n)
-    elif len(sys.argv)==3:
+            download(comic)
+    elif len(sys.argv)==2:
         name = sys.argv[1]
-        page_n = int(sys.argv[2])
-        download(name,page_n)
+        download(name)
     else :
         print("python3 getComic.py 2014/02/39332 23")
