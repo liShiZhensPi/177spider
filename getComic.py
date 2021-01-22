@@ -1,15 +1,20 @@
+import sys
 from lxml.html import etree
 import requests
 
 images = []
+success = "success"
 
 
 def download(name, page_n):
-    global images
+    global images,success
     images = []
+    success = "success"
 
     url = "http://www.177pic.pw/html/"+name
-    title = "-".join(name.split("/"))
+    request = requests.get(url)
+    html = etree.HTML(request.text)
+    title = html.xpath("//main[@id='main']/article/header/h1/text()")[0]
     print(title+" downloading...")
 
     for i in range(page_n):
@@ -17,6 +22,8 @@ def download(name, page_n):
 
         if request.status_code != 200:
             print("failed status_code="+str(request.status_code))
+            success = "request failed"
+            return
         else:
             html = request.text
             # with open("text.html","w",encoding="utf-8") as f:
@@ -25,6 +32,7 @@ def download(name, page_n):
             parse(html)
 
     createHtml(title)
+    success = title
     print(title+" finished")
 
 
@@ -131,21 +139,27 @@ def createHtml(title):
     global images
     # print(images)
     pics = "\n".join(images)
-    htmlFile = open("./templates/{0}".format(title), "w", encoding="utf-8")
+    htmlFile = open("./templates/{0}.html".format(title), "w", encoding="utf-8")
     html = text1+title+text2+pics+text3
     htmlFile.write(html)
     htmlFile.close()
 
 
 if __name__ == "__main__":
-    comics = []
-    with open("names.txt", "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            comics.append(line.replace("\n", ""))
+    if len(sys.argv) ==1:
+        comics = []
+        with open("names.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                comics.append(line.replace("\n", ""))
 
-    for comic in comics:
-
-        name = comic.split(" ")[0]
-        page_n = int(comic.split(" ")[1])
-        download(name, page_n)
+        for comic in comics:
+            name = comic.split(" ")[0]
+            page_n = int(comic.split(" ")[1])
+            download(name, page_n)
+    elif len(sys.argv)==3:
+        name = sys.argv[1]+".html"
+        page_n = int(sys.argv[2])
+        download(name,page_n)
+    else :
+        print("python getComic.py 2014/02/39332 23")
