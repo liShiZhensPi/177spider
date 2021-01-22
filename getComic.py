@@ -1,14 +1,55 @@
-<!DOCTYPE html>
+from lxml.html import etree
+import requests
+
+images = []
+
+
+def download(name, page_n):
+    global images
+    images = []
+
+    url = "http://www.177pic.pw/html/"+name
+    title = "-".join(name.split("/"))
+    print(title+" downloading...")
+
+    for i in range(page_n):
+        request = requests.get(url+"/"+str(i+1))
+
+        if request.status_code != 200:
+            print("failed status_code="+str(request.status_code))
+        else:
+            html = request.text
+            # with open("text.html","w",encoding="utf-8") as f:
+            #     f.write(html)
+            print("{0}/{1}".format(i+1, page_n))
+            parse(html)
+
+    createHtml(title)
+    print(title+" finished")
+
+
+def parse(html_str):
+    html = etree.HTML(html_str)
+    pics = html.xpath("//div[@class='single-content']/p")
+    for pic in pics:
+        global images
+        images.append(etree.tostring(pic).decode('utf-8'))
+
+
+def createHtml(title):
+    text1 = """<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
-    <title>{0}</title>
+    <title>"""
+    text2 = """</title>
 
 </head>
 
 <body>
-    {1}
+    """
+    text3 = """
     <script>
         window.lazyLoadOptions = {
             elements_selector: "img[data-lazy-src],.rocket-lazyload,iframe[data-lazy-src]",
@@ -85,4 +126,26 @@
         src="http://www.177pic.pw/wp-content/plugins/wp-rocket/assets/js/lazyload/11.0.6/lazyload.min.js"></script>
 </body>
 
-</html>
+</html>"""
+
+    global images
+    # print(images)
+    pics = "\n".join(images)
+    htmlFile = open("./html/{0}".format(title), "w", encoding="utf-8")
+    html = text1+title+text2+pics+text3
+    htmlFile.write(html)
+    htmlFile.close()
+
+
+if __name__ == "__main__":
+    comics = []
+    with open("names.txt", "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            comics.append(line.replace("\n", ""))
+
+    for comic in comics:
+
+        name = comic.split(" ")[0]
+        page_n = int(comic.split(" ")[1])
+        download(name, page_n)

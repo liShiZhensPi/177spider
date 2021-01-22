@@ -8,7 +8,7 @@ def download(name, page_n):
     global images
     images = []
 
-    url = "http://www.177pic.info/html"+name
+    url = "http://www.177pic.pw/html/"+name
     request = requests.get(url)
     html = etree.HTML(request.text)
     title = html.xpath("//main[@id='main']/article/header/h1/text()")[0]
@@ -125,7 +125,7 @@ def createHtml(title):
         }, false);
     </script>
     <script data-no-minify="1" async
-        src="http://www.177pic.info/wp-content/plugins/wp-rocket/assets/js/lazyload/11.0.6/lazyload.min.js"></script>
+        src="http://www.177pic.pw/wp-content/plugins/wp-rocket/assets/js/lazyload/11.0.6/lazyload.min.js"></script>
 </body>
 
 </html>"""
