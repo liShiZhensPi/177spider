@@ -160,4 +160,4 @@ if __name__ == "__main__":
         name = sys.argv[1]
         download(name)
     else :
-        print("python3 getComic.py 2014/02/39332 23")
+        print("python3 getComic.py 2014/02/39332")
