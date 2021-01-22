@@ -131,7 +131,7 @@ def createHtml(title):
     global images
     # print(images)
     pics = "\n".join(images)
-    htmlFile = open("./html/{0}".format(title), "w", encoding="utf-8")
+    htmlFile = open("./template/{0}".format(title), "w", encoding="utf-8")
     html = text1+title+text2+pics+text3
     htmlFile.write(html)
     htmlFile.close()
